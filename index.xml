@@ -21,16 +21,5 @@
 If you want to contact me, please do so via email</description>
     </item>
     
-    <item>
-      <title>Hello World</title>
-      <link>https://davidbuckley.ca/post/hello-world/</link>
-      <pubDate>Fri, 19 Jun 2020 11:05:12 -0400</pubDate>
-      
-      <guid>https://davidbuckley.ca/post/hello-world/</guid>
-      <description>This is the first blog post&amp;hellip; yay!
-For a while I&amp;rsquo;ve had the ambition that I should try my hand at writing a blog, so this is me finally getting around to it.
-I don&amp;rsquo;t expect to update often, but who knows.</description>
-    </item>
-    
   </channel>
 </rss>
