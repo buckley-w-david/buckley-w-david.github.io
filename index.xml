@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home on David Buckley</title>
+    <link>https://davidbuckley.ca/</link>
+    <description>Recent content in Home on David Buckley</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 19 Jun 2020 11:05:12 -0400</lastBuildDate>
+    
+	<atom:link href="https://davidbuckley.ca/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>https://davidbuckley.ca/about/</link>
+      <pubDate>Fri, 19 Jun 2020 11:05:12 -0400</pubDate>
+      
+      <guid>https://davidbuckley.ca/about/</guid>
+      <description>This site is built with Hugo and hosted on Github Pages, isn&amp;rsquo;t that neat?
+If you want to contact me, please do so via email</description>
+    </item>
+    
+  </channel>
+</rss>
