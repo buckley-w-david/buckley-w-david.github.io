@@ -358,17 +358,11 @@ for node in values:
 &gt;&gt;&gt; z = 3
 &gt;&gt;&gt; print(f('''INSERT INTO users (col1, col2, col3) VALUES ({x+1}, {y+2}, {z+3})'''))
 ('INSERT INTO users (col1, col2, col3) VALUES (?, ?, ?)', [2, 4, 6])```
-</code></pre><p>&hellip;mostly</p>
-<pre><code>&gt;&gt;&gt; def do_something_compilicated(value):
+&gt;&gt;&gt; def do_something(value):
 ...     return value*5
 ... 
-&gt;&gt;&gt; print(f('''INSERT INTO users (col1, col2, col3) VALUES ({do_something_complicated(x)}, {y+2}, {z+3})'''))
-Traceback (most recent call last):
-  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
-  File &quot;/home/david/Projects/parameterized-interpolated-sql-queries/interpolate.py&quot;, line 45, in parameterize_interpolated_querystring_spicy
-    exec(compile(assign, '&lt;string&gt;', 'exec'), globals(), outer_frame.frame.f_locals)
-  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
-NameError: name 'do_something_complicated' is not defined
+&gt;&gt;&gt; print(f('''INSERT INTO users (col1, col2, col3) VALUES ({do_something(x+7)}, {y+2}, {z+3})'''))
+('INSERT INTO users (col1, col2, col3) VALUES (?, ?, ?)', [40, 4, 6])
 </code></pre><h2 id="conclusion">Conclusion</h2>
 <p>SQL injection sucks, but we should probably develop our tools a bit more to make it so the frictionless path is the safe one, instead of the other way around.</p>
 <p>Please don&rsquo;t actually use any of this code.</p>
