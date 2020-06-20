@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <meta name="generator" content="Hugo 0.72.0" />
-  <link rel="canonical" href="https://davidbuckley.ca/about/">
+  <link rel="canonical" href="https://davidbuckley.ca/post/string-interpolation-and-sql/">
 
   
 
@@ -34,7 +34,7 @@
 
   
   
-  <title>About | David Buckley</title>
+  <title>String Interpolation and SQL | David Buckley</title>
 </head>
 
   <body>
@@ -172,7 +172,7 @@
       
       
       
-      <a href="/post/" >
+      <a href="/post/" aria-current="page">
         <svg class="bookmark-icon" aria-hidden="true" focusable="false" viewBox="0 0 40 50">
           <use xlink:href="#bookmark"></use>
         </svg>
@@ -185,7 +185,7 @@
       
       
       
-      <a href="/about/" aria-current="page">
+      <a href="/about/" >
         <svg class="bookmark-icon" aria-hidden="true" focusable="false" viewBox="0 0 40 50">
           <use xlink:href="#bookmark"></use>
         </svg>
@@ -215,13 +215,169 @@
         <div>
           
   <main id="main">
-    <h1>About</h1>
-    <p>This site is built with Hugo and hosted on Github Pages, isn&rsquo;t that neat?</p>
-<p>If you want to contact me, please do so via <a href="mailto:david@davidbuckley.ca">email</a></p>
+    <h1>
+      <svg class="bookmark-icon" aria-hidden="true" viewBox="0 0 40 50" focusable="false">
+        <use xlink:href="#bookmark"></use>
+      </svg>
+      String Interpolation and SQL
+    </h1>
+
+    <div class="date">
+      
+      
+      <strong>Publish date: </strong>Jun 19, 2020
+      
+        
+      
+    </div>
+
+    
+    
+    
+      
+
+  <nav class="toc" aria-labelledby="toc-heading">
+    <h2 id="toc-heading">Table of contents</h2>
+    <ol>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#background">
+            Background
+          </a>
+        </li>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#parameterize_interpolated_querystring">
+            parameterize_interpolated_querystring
+          </a>
+        </li>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#parameterize_interpolated_querystring_spicy">
+            parameterize_interpolated_querystring_spicy
+          </a>
+        </li>
+      
+        <li>
+          
+          
+          
+          
+          <a href="#conclusion">
+            Conclusion
+          </a>
+        </li>
+      
+    </ol>
+  </nav>
+
+
+    
+
+    <h2 id="background">Background</h2>
 <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<p>SQL injection sucks, right? I&rsquo;m not going to talk about it too much because firstly you already know, and secondly you can go somewhere else for a much better explanation.</p>
+<pre><code class="language-bad" data-lang="bad"># This is vulnerable to an SQL injection attack
+cursor.execute(f&quot;SELECT * FROM users WHERE id = {id}&quot;) 
+</code></pre><pre><code class="language-good" data-lang="good"># This is not, but it is much less natural
+cursor.execute(&quot;SELECT * FROM users WHERE id = ?&quot;, id)
+</code></pre><p>What I <strong>am</strong> going to talk about though is a neat idea I had after noticing a set of functions in EF Core: <code>ExecuteSqlInterpolated</code> and <code>FromSqlInterpolated</code>.</p>
+<p>It reminded me of some conversations that a friend <a href="https://github.com/sleepycat"> Mike Williamson </a> and I had while we were working together at the Canadian Digital Service around how SQL injection is a particularly annoying trap to fall into since the obvious way to accomplish constructing a query with dynamic pieces of data will result in vulnerability.</p>
+<p>Mike wrote a <a href="https://mikewilliamson.wordpress.com/2018/10/22/tagged-template-literals-and-the-hack-that-will-never-go-away"> blog post </a> himself about the subject back in 2018 and how javascript has a neat way to deliver the developer experience of string interpolation without compromising security.</p>
+<p>I encourage you to read that post before continuing on as it makes a lot of good points to understand where I&rsquo;m going with this.</p>
+<hr>
+<p>So that&rsquo;s .NET and Javascript that have solutions to this problem, so good for developers working with those languages. I&rsquo;d bet that some other languages have their own solution to the problem, but what I&rsquo;m interesting in discussing today is python.</p>
+<p>As far as I know, when dealing with a database in python the expectation is that you will use an ORM of some sort, and if working with raw SQL will simply use prepared statements.</p>
+<p>Taking inspiration from other languages, I wanted to be able to use the syntax of string interpolation (Specifically <a href="https://www.python.org/dev/peps/pep-0498/">f-strings</a>) to construct SQL queries without the danger of injection attacks.</p>
+<p>The only problem is unlike javascript python doesn&rsquo;t have the same tagged template literals, and unlike C# there is no way to supply a templated string such that a function can act on it before it is formatted into a string, making the values embedded within unreachable.</p>
+<p>One thing that python does have however is very powerful introspection capabilities, which we can (ab)use to accomplish something very close to our goal of SQL safe string interpolation.</p>
+<p>The <a href="https://docs.python.org/3/library/inspect.html"> inspect </a> and <a href="https://docs.python.org/3/library/ast.html"> ast </a> modules allow for lots of wacky hijinks, but the methods we will be using today are <code>inspect.currentframe</code>, <code>inspect.getouterframes</code> and <code>ast.parse</code>.</p>
+<p>Without further ado, I introduce&hellip; <a href="https://github.com/buckley-w-david/parameterized-interpolated-sql-queries/blob/master/interpolate.py"> interpolate.py </a>!</p>
+<p><code>interpolate.py</code> contains two functions, one horrible, the other even worse.</p>
+<h2 id="parameterize_interpolated_querystring"><code>parameterize_interpolated_querystring</code></h2>
+<p><code>paramaterize_interpolated_querystring</code> takes as its input a string with the same syntax as an f-string, just without the <code>f</code> prefix.</p>
+<p>So for example, if you wanted to do this:</p>
+<pre><code>id = 5
+# This is vulnerable to an SQL injection attack
+cursor.execute(f&quot;SELECT * FROM users WHERE id = {id}&quot;) 
+</code></pre><p>You could instead do this</p>
+<pre><code>import interpolate
+id = 5
+f = interpolate.paramaterize_interpolated_querystring
+cursor.execute(*f(&quot;SELECT * FROM users WHERE id = {id}&quot;)) 
+</code></pre><p>Which will auto-magically be transformed into</p>
+<pre><code>cursor.execute(&quot;SELECT * FROM users WHERE id = ?&quot;, [5])
+</code></pre><h3 id="how-does-it-work">How does it work?</h3>
+<p>Most of the magic is in these lines</p>
+<pre><code>frame = inspect.currentframe()
+outer_frame = inspect.getouterframes(frame)[1]
+possible_query_values = {**globals(), **outer_frame.frame.f_locals}
+</code></pre><p>This takes advantage of the <code>inspect</code> module to reach up into the callers stack frame and retrieve their local variables. This is what allows us to return the list of parameter values using the variable names within the interpolation.</p>
+<p>Taking advantage of the <code>ast</code> module then allows us to do the f-string parsing (The same way that python itself does it), and replace all instances of interpolation with a placeholder (<code>?</code> by default, but the function accepts this as an argument), resulting in the parameterized query string.</p>
+<h2 id="parameterize_interpolated_querystring_spicy"><code>parameterize_interpolated_querystring_spicy</code></h2>
+<p>This function is <code>parameterize_interpolated_querystring</code> cursed twin. Generally it does the same thing, except it is more powerful and far more dangerous.</p>
+<p>You may have noticed while reading about <code>parameterize_interpolated_querystring</code> that the method I described will actually only work for interpolation like <code>f&quot;value: {x}&quot;</code> and fail when trying to do something like <code>f&quot;value: {x+1}&quot;</code>.</p>
+<p>This is probably fine, it seems somewhat unnecessary and dangerous to allow arbitrary expressions.</p>
+<p>However it was a hole in functionality, and <code>parameterize_interpolated_querystring_spicy</code> is the solution to fill it.</p>
+<p>Generally the approach is similar, use <code>inspect</code> and <code>ast</code> to get what values you need and return a parameterized version of the query. The difference is that instead of just using whatever was in the interpolation to look up the variables value, we use the <code>compile</code> and <code>exec</code> build-in functions along with some more ast manipulation to actually evaluate whatever was in there.</p>
+<p>The gist of how that&rsquo;s done is here:</p>
+<pre><code>...
+tree = ast.parse(f&quot;f'{query}'&quot;)
+values = tree.body[0].value.values
+temp_name = '__paramaterize_interpolated_querystring_spicy_temp'
+assign = ast.parse(f'{temp_name} = 0')
+
+for node in values:
+	...
+		# This may be the most cursed code I have ever written
+		assign.body[0].value = node.value
+		assign = ast.fix_missing_locations(assign)
+		exec(compile(assign, '&lt;string&gt;', 'exec'), globals(), outer_frame.frame.f_locals)
+
+		query_values.append(outer_frame.frame.f_locals[temp_name])
+	...
+</code></pre><p>Using the <code>ast</code> module I build an assignment statement for the value to interpolate, <code>compile</code> and <code>exec</code> it, and then retrieve it from the outer stack frames locals.</p>
+<p>I would have much preferred not having to pollute the outer stack frame with a variable, but I could not figure out any other technique to accomplish the same feat and retrieve the value. This could very well just be my ignorance.</p>
+<p>The upside though is that it does work!</p>
+<pre><code>&gt;&gt;&gt; import interpolate
+&gt;&gt;&gt; f = interpolate.parameterize_interpolated_querystring_spicy
+&gt;&gt;&gt; x = 1
+&gt;&gt;&gt; y = 2
+&gt;&gt;&gt; z = 3
+&gt;&gt;&gt; print(f('''INSERT INTO users (col1, col2, col3) VALUES ({x+1}, {y+2}, {z+3})'''))
+('INSERT INTO users (col1, col2, col3) VALUES (?, ?, ?)', [2, 4, 6])```
+</code></pre><p>&hellip;mostly</p>
+<pre><code>&gt;&gt;&gt; def do_something_compilicated(value):
+...     return value*5
+... 
+&gt;&gt;&gt; print(f('''INSERT INTO users (col1, col2, col3) VALUES ({do_something_complicated(x)}, {y+2}, {z+3})'''))
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/home/david/Projects/parameterized-interpolated-sql-queries/interpolate.py&quot;, line 45, in parameterize_interpolated_querystring_spicy
+    exec(compile(assign, '&lt;string&gt;', 'exec'), globals(), outer_frame.frame.f_locals)
+  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
+NameError: name 'do_something_complicated' is not defined
+</code></pre><h2 id="conclusion">Conclusion</h2>
+<p>SQL injection sucks, but we should probably develop our tools a bit more to make it so the frictionless path is the safe one, instead of the other way around.</p>
+<p>Please don&rsquo;t actually use any of this code.</p>
 
   </main>
+  <div id="disqus-container">
+  
+</div>
+
 
           <footer role="contentinfo">
   <div>
