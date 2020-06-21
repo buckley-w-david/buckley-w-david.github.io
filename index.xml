@@ -17,8 +17,7 @@
       <pubDate>Fri, 19 Jun 2020 19:52:43 -0400</pubDate>
       
       <guid>https://davidbuckley.ca/post/string-interpolation-and-sql/</guid>
-      <description>Background Don&#39;t use any code I provide or link to in production without giving it a serious think.
- SQL injection sucks, right? I&amp;rsquo;m not going to talk about it too much because firstly you already know, and secondly you can go somewhere else for a much better explanation.
+      <description>Background    Don&#39;t use any code I provide or link to in production without giving it a serious think.   SQL injection sucks, right? I&amp;rsquo;m not going to talk about it too much because firstly you already know, and secondly you can go somewhere else for a much better explanation.
 # This is vulnerable to an SQL injection attack cursor.execute(f&amp;quot;SELECT * FROM users WHERE id = {id}&amp;quot;) # This is not, but it is much less natural cursor.</description>
     </item>
     

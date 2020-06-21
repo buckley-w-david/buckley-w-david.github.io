@@ -277,9 +277,17 @@
     
 
     <h2 id="background">Background</h2>
-<div class="disclaimer">
-<p>Don't use any code I provide or link to in production without giving it a serious think.</p>
-</div>
+<aside aria-label="warning" class="note warning">
+  <div>
+    <svg class="sign" aria-hidden="true" viewBox="0 0 48.430474 41.646302" focusable="false">
+      <use xlink:href="#warning"></use>
+    </svg>
+    
+Don't use any code I provide or link to in production without giving it a serious think.
+
+  </div>
+</aside>
+
 <p>SQL injection sucks, right? I&rsquo;m not going to talk about it too much because firstly you already know, and secondly you can go somewhere else for a much better explanation.</p>
 <pre><code class="language-bad" data-lang="bad"># This is vulnerable to an SQL injection attack
 cursor.execute(f&quot;SELECT * FROM users WHERE id = {id}&quot;) 
@@ -322,12 +330,25 @@ outer_frame = inspect.getouterframes(frame)[1] # element 1 is the parent stack f
 outer_locals = outer_frame.frame.f_locals.copy()
 </code></pre><p>This takes advantage of the <code>inspect</code> module to reach up into the callers stack frame and retrieve their local variables. This is what allows us to later use these values as part of the call to resolve the interpolation. The <code>dict</code> of locals is copied instead of used directly so that we can add to it without polluting the parent namespace.</p>
 <p>By using <code>ast.parse</code>, the string is parsed as an f-string the same way that python itself does it. <code>json.dumps</code> is used for quote escaping so that the code isn&rsquo;t <em>itself</em> vulnerable to an injection attack.</p>
-<div class="disclaimer">
-<p> This is the main reason you shouldn't actually do this, because while I have thought about the issue and attempted to get around it, there are no guarantees that an attacker would not be able to find a way to inject code in such a way that it's run by the python interpreter.</p>
-</div>
+<aside aria-label="warning" class="note warning">
+  <div>
+    <svg class="sign" aria-hidden="true" viewBox="0 0 48.430474 41.646302" focusable="false">
+      <use xlink:href="#warning"></use>
+    </svg>
+    
+This is the main reason you shouldn't actually do this, because while I have thought about the issue and attempted to get around it, there are no guarantees that an attacker would not be able to find a way to inject code in such a way that it's run by the python interpreter.
+
+  </div>
+</aside>
+
 <p>Once all that bookkeeping is done, we can move on to building the return.</p>
-<pre><code>temp_name = '__parameterize_interpolated_querystring_temp'
-assign = ast.fix_missing_locations(ast.parse(f'{temp_name} = 0'))
+
+
+
+
+<div class="code-annotated numbered"><code>
+temp_name = &#39;__parameterize_interpolated_querystring_temp&#39;
+<span class='highlight'>assign = ast.fix_missing_locations(ast.parse(f&#39;{temp_name} = 0&#39;))</span>
 
 paramaterized_query = []
 query_values = []
@@ -335,22 +356,33 @@ query_values = []
 # An f-string has two parts
 for node in values:
     # Constants, which are just sections of static strings
-    if isinstance(node, _ast.Constant):
+    if isinstance(node, _ast.Constant): 
         paramaterized_query.append(node.value)
-    # And FormattedValue's, that have whatever is needed to calculate the result of the interpolation
+    # And FormattedValue&#39;s, that have whatever is needed to calculate the result of the interpolation
     elif isinstance(node, _ast.FormattedValue):
         paramaterized_query.append(placeholder)
-
         # This may be the most cursed code I have ever written
-        assign.body[0].value = node.value # We pull off the calculation node and attach it to our dummy assignment
-        exec(compile(assign, '&lt;string&gt;', 'exec'), globals(), outer_locals)
+        <span class='highlight'>assign.body[0].value = node.value</span> # We pull off the calculation node and attach it to our dummy assignment
+        <span class='highlight'>exec(compile(assign, &#39;&lt;string&gt;&#39;, &#39;exec&#39;), globals(), outer_locals)</span>
 
         query_values.append(outer_locals[temp_name])
 
-return (''.join(paramaterized_query), query_values)
+return (&#39;&#39;.join(paramaterized_query), query_values)
 
-</code></pre><p>Using the <code>ast</code> module I build an assignment statement to store the result of resolving the interpolation (to the <code>temp_name</code> variable).</p>
-<p>Then we go through the f-string AST, and switch out the value in our assignment AST with the one from the query f-string, <code>compile</code> and <code>exec</code> it, then retrieve the value that was stored within our <code>outer_locals</code> dictionary.</p>
+</code></div>
+
+<!--_ Stupid HTML comment with an underscore to stop my editor from thinking I have an incomplete italics marker-->
+<ol>
+<li>
+<p>Build an assignment statement to store the result of resolving the interpolation (to the <code>temp_name</code> variable).</p>
+</li>
+<li>
+<p>Switch out the value in our assignment AST with the one from the query f-string</p>
+</li>
+<li>
+<p><code>compile</code> and <code>exec</code> it, then retrieve the value that was stored within our <code>outer_locals</code> dictionary.</p>
+</li>
+</ol>
 <p>This is extremely danger.</p>
 <p>But it does work.</p>
 <pre><code>&gt;&gt;&gt; import interpolate
