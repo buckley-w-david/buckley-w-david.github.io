@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <meta name="generator" content="Hugo 0.72.0" />
+  <meta name="generator" content="Hugo 0.73.0" />
   <link rel="canonical" href="https://davidbuckley.ca/post/string-interpolation-and-sql/">
 
   
@@ -140,7 +140,7 @@
         <img src="https://davidbuckley.ca/images/logo.svg" alt="">
       </a>
       <p class="library-desc">
-        
+         I write code 
       </p>
     </div>
     <nav id="patterns-nav" class="patterns" role="navigation">
@@ -213,6 +213,13 @@
 
       <div class="main-and-footer">
         <div>
+  <label for="themer">
+    dark theme: <input type="checkbox" id="themer" class="vh">
+    <span aria-hidden="true"></span>
+  </label>
+</div>
+
+        <div>
           
   <main id="main">
     <h1>
@@ -231,6 +238,21 @@
       
     </div>
 
+    
+      <div class="tags">
+        <strong>Tags: </strong>
+        <ul aria-label="tags">
+          
+            <li>
+              <svg class="tag-icon" aria-hidden="true" viewBox="0 0 177.16535 177.16535" focusable="false">
+                <use xlink:href="#tag"></use>
+              </svg>
+              
+              <a href="https://davidbuckley.ca/tags/demo/">demo</a>
+            </li>
+          
+        </ul>
+      </div>
     
     
     
@@ -386,7 +408,7 @@ return (&#39;&#39;.join(paramaterized_query), query_values)
 <p>This is extremely danger.</p>
 <p>But it does work.</p>
 <pre><code>&gt;&gt;&gt; import interpolate
-&gt;&gt;&gt; f = interpolate.parameterize_interpolated_querystring_spicy
+&gt;&gt;&gt; f = interpolate.parameterize_interpolated_querystring
 &gt;&gt;&gt; x = 1
 &gt;&gt;&gt; y = 2
 &gt;&gt;&gt; z = 3
@@ -409,12 +431,6 @@ return (&#39;&#39;.join(paramaterized_query), query_values)
 
 
           <footer role="contentinfo">
-  <div>
-    <label for="themer">
-      dark theme: <input type="checkbox" id="themer" class="vh">
-      <span aria-hidden="true"></span>
-    </label>
-  </div>
   
 </footer>
 
@@ -426,6 +442,8 @@ return (&#39;&#39;.join(paramaterized_query), query_values)
 
 
 <script src="https://davidbuckley.ca/js/dom-scripts.js"></script>
+
+
 
     
     

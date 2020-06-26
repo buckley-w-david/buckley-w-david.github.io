@@ -3,6 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://davidbuckley.ca/post/colour-sort/</loc>
+    <lastmod>2020-06-24T17:52:44-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://davidbuckley.ca/tags/demo/</loc>
+    <lastmod>2020-06-24T17:52:44-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://davidbuckley.ca/tags/</loc>
+    <lastmod>2020-06-24T17:52:44-04:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://davidbuckley.ca/post/string-interpolation-and-sql/</loc>
     <lastmod>2020-06-19T19:52:43-04:00</lastmod>
   </url>
@@ -29,10 +44,6 @@
   
   <url>
     <loc>https://davidbuckley.ca/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://davidbuckley.ca/tags/</loc>
   </url>
   
 </urlset>

@@ -1,9 +1,7 @@
-.disclaimer {
-  outline-style: solid;
-  outline-color: black;
-  outline-width: 2px;
-}
-
-.disclaimer > p {
-  color: red;
+label[for = "themer"] {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 0.85rem;
+    text-align: center;
 }
