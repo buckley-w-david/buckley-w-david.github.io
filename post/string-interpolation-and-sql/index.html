@@ -343,7 +343,7 @@ cursor.execute(*f(&quot;SELECT * FROM users WHERE id = {id}&quot;))
 <pre><code>cursor.execute(&quot;SELECT * FROM users WHERE id = ?&quot;, [5])
 </code></pre><h3 id="how-does-it-work">How does it work?</h3>
 <p>Most of the magic is in these lines:</p>
-<pre><code>tree = ast.fix_missing_locations(ast.parse(f'f{json.dumps(query)}'))
+<pre><code>tree = ast.fix_missing_locations(ast.parse(&quot;f&quot; + repr(query)))
 values = tree.body[0].value.values
 
 frame = inspect.currentframe()
@@ -351,7 +351,7 @@ outer_frame = inspect.getouterframes(frame)[1] # element 1 is the parent stack f
 
 outer_locals = outer_frame.frame.f_locals.copy()
 </code></pre><p>This takes advantage of the <code>inspect</code> module to reach up into the callers stack frame and retrieve their local variables. This is what allows us to later use these values as part of the call to resolve the interpolation. The <code>dict</code> of locals is copied instead of used directly so that we can add to it without polluting the parent namespace.</p>
-<p>By using <code>ast.parse</code>, the string is parsed as an f-string the same way that python itself does it. <code>json.dumps</code> is used for quote escaping so that the code isn&rsquo;t <em>itself</em> vulnerable to an injection attack.</p>
+<p>By using <code>ast.parse</code>, the string is parsed as an f-string the same way that python itself does it. <code>repr</code> is used for quote escaping so that the code isn&rsquo;t <em>itself</em> vulnerable to an injection attack.</p>
 <aside aria-label="warning" class="note warning">
   <div>
     <svg class="sign" aria-hidden="true" viewBox="0 0 48.430474 41.646302" focusable="false">
@@ -359,6 +359,8 @@ outer_locals = outer_frame.frame.f_locals.copy()
     </svg>
     
 This is the main reason you shouldn't actually do this, because while I have thought about the issue and attempted to get around it, there are no guarantees that an attacker would not be able to find a way to inject code in such a way that it's run by the python interpreter.
+
+In this case the "atacker" is the one calling the function, not the one supplying values, since the values to interpolate are never actually substituted into the string.
 
   </div>
 </aside>
