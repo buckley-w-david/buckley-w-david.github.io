@@ -15,7 +15,7 @@
       <guid>https://davidbuckley.ca/post/stacksort/</guid>
       <description>Running arbitrary untrusted code is a bad idea, use your head.   You can find the source for stacksort here.
 Background This project was inspired by the XKCD comic Ineffective Sorts and the similar project by Gregory Koberger, stacksort.
- StackSort connects to StackOverflow, searches for &amp;lsquo;sort a list&amp;rsquo;, and downloads and runs code snippets until the list is sorted. &amp;mdash; Randall Munroe  I wanted to be able to run download and run code from StackOverflow the same way I would use any normal Python package.</description>
+ StackSort connects to StackOverflow, searches for &amp;lsquo;sort a list&amp;rsquo;, and downloads and runs code snippets until the list is sorted. &amp;mdash; Randall Munroe  I wanted to be able to download and run code from StackOverflow the same way I would use any normal Python package.</description>
     </item>
     
   </channel>
