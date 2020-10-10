@@ -6,11 +6,7 @@
     <description>Recent content in Blog on David Buckley</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Jun 2020 12:40:05 -0400</lastBuildDate>
-    
-	<atom:link href="https://davidbuckley.ca/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Fri, 19 Jun 2020 12:40:05 -0400</lastBuildDate><atom:link href="https://davidbuckley.ca/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>String Interpolation and SQL</title>
       <link>https://davidbuckley.ca/post/string-interpolation-and-sql/</link>
