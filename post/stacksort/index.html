@@ -528,6 +528,8 @@ def entrypoints(tree: _ast.Module):
 <p>Finally these functions are retrieved from the global scope, and called with the unsorted list passed as a parameter. If it doesn&rsquo;t explode, the function is stored and used on any subsequent calls.
 If none of the functions worked, a <code>NoValidCodeError</code> is thrown, and the loader moves on to the next code block.</p>
 <h2 id="trying-it-out">Trying it Out</h2>
+<p>You can try it yourself in the safety of a Jupyter Notebook in your browser by checking it out on Binder.</p>
+<p><a href="https://mybinder.org/v2/gh/buckley-w-david/stacksort/master"><img src="https://mybinder.org/badge_logo.svg" alt="Binder"></a></p>
 <h3 id="setup">Setup</h3>
 <p>By default the package does all it&rsquo;s work silently, but by setting the <code>logLevel</code> to <code>DEBUG</code> you can see what code it&rsquo;s trying to run.</p>
 <pre><code>&gt;&gt;&gt; from stacksort import config
@@ -548,7 +550,7 @@ If none of the functions worked, a <code>NoValidCodeError</code> is thrown, and 
     
     
     
-    <button aria-expanded="false" data-expands="js-expandable-eb66cf4cc5135c489dceddc9590adea8">
+    <button aria-expanded="false" data-expands="js-expandable-ade985e5cc95db6dc46cad4ce0f139c8">
       <span class="expandable-label">QuickSort</span>
       <svg aria-hidden="true" focusable="false" viewBox="0 0 70.866142 70.866141">
         <g transform="translate(0 -981.5)">
@@ -560,7 +562,7 @@ If none of the functions worked, a <code>NoValidCodeError</code> is thrown, and 
   
     </h2>
   
-  <div id="js-expandable-eb66cf4cc5135c489dceddc9590adea8" hidden>
+  <div id="js-expandable-ade985e5cc95db6dc46cad4ce0f139c8" hidden>
     <pre><code>&gt;&gt;&gt; from stacksort import quicksort
 &gt;&gt;&gt; sorted_list = quicksort(l)
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.stackexchange.com:443
@@ -609,7 +611,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
     
     
     
-    <button aria-expanded="false" data-expands="js-expandable-4d1f46fb79ef3434c21d67686a69484f">
+    <button aria-expanded="false" data-expands="js-expandable-b66dff42d3471c799683e144f6f4a864">
       <span class="expandable-label">MergeSort</span>
       <svg aria-hidden="true" focusable="false" viewBox="0 0 70.866142 70.866141">
         <g transform="translate(0 -981.5)">
@@ -621,7 +623,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
   
     </h2>
   
-  <div id="js-expandable-4d1f46fb79ef3434c21d67686a69484f" hidden>
+  <div id="js-expandable-b66dff42d3471c799683e144f6f4a864" hidden>
     <pre><code>&gt;&gt;&gt; from stacksort import mergesort
 &gt;&gt;&gt; sorted_list = mergesort(l)
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.stackexchange.com:443
@@ -666,7 +668,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
     
     
     
-    <button aria-expanded="false" data-expands="js-expandable-c622debf5dd3c1cad368e22876a2d73d">
+    <button aria-expanded="false" data-expands="js-expandable-5e72c3d23db2a6c3d26c78f281dad6ed">
       <span class="expandable-label">InsertionSort</span>
       <svg aria-hidden="true" focusable="false" viewBox="0 0 70.866142 70.866141">
         <g transform="translate(0 -981.5)">
@@ -678,7 +680,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
   
     </h2>
   
-  <div id="js-expandable-c622debf5dd3c1cad368e22876a2d73d" hidden>
+  <div id="js-expandable-5e72c3d23db2a6c3d26c78f281dad6ed" hidden>
     <pre><code>&gt;&gt;&gt; from stacksort import insertionsort
 &gt;&gt;&gt; sorted_list = insertionsort(l)
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.stackexchange.com:443
@@ -717,7 +719,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
     
     
     
-    <button aria-expanded="false" data-expands="js-expandable-1eec633a85adbcbea8fa58ae6080b2f9">
+    <button aria-expanded="false" data-expands="js-expandable-ae932c355fa8beec0fab886b18aad0e6">
       <span class="expandable-label">SelectionSort</span>
       <svg aria-hidden="true" focusable="false" viewBox="0 0 70.866142 70.866141">
         <g transform="translate(0 -981.5)">
@@ -729,7 +731,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
   
     </h2>
   
-  <div id="js-expandable-1eec633a85adbcbea8fa58ae6080b2f9" hidden>
+  <div id="js-expandable-ae932c355fa8beec0fab886b18aad0e6" hidden>
     <p>It&rsquo;s not always going to give you the kind of result you&rsquo;re expecting.</p>
 <pre><code>&gt;&gt;&gt; from stacksort import selectionsort
 &gt;&gt;&gt; sorted_list = selectionsort(l)
@@ -781,7 +783,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
     
     
     
-    <button aria-expanded="false" data-expands="js-expandable-767e4ff819a3751ad4e29167e682099a">
+    <button aria-expanded="false" data-expands="js-expandable-91e6012a4fda92776a6495fe78871e39">
       <span class="expandable-label">BubbleSort</span>
       <svg aria-hidden="true" focusable="false" viewBox="0 0 70.866142 70.866141">
         <g transform="translate(0 -981.5)">
@@ -793,7 +795,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
   
     </h2>
   
-  <div id="js-expandable-767e4ff819a3751ad4e29167e682099a" hidden>
+  <div id="js-expandable-91e6012a4fda92776a6495fe78871e39" hidden>
     <pre><code>&gt;&gt;&gt; from stacksort import bubblesort
 &gt;&gt;&gt; sorted_list = bubblesort(l)
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.stackexchange.com:443
@@ -1010,7 +1012,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
     
     
     
-    <button aria-expanded="false" data-expands="js-expandable-d93ce6cf5fe74cb65f33c5dcf72ee032">
+    <button aria-expanded="false" data-expands="js-expandable-c65ffff3c7eced45e97bc3023256de3c">
       <span class="expandable-label">Radix Sort</span>
       <svg aria-hidden="true" focusable="false" viewBox="0 0 70.866142 70.866141">
         <g transform="translate(0 -981.5)">
@@ -1022,7 +1024,7 @@ DEBUG:RefactoringTool:Refactoring StackOverflow
   
     </h2>
   
-  <div id="js-expandable-d93ce6cf5fe74cb65f33c5dcf72ee032" hidden>
+  <div id="js-expandable-c65ffff3c7eced45e97bc3023256de3c" hidden>
     <pre><code>&gt;&gt;&gt; from stacksort import radix_sort # Underscores are replaced with spaces in the search!
 &gt;&gt;&gt; sorted_list = radix_sort(l)
 DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): api.stackexchange.com:443
